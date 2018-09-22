@@ -2,6 +2,7 @@ package com.example.android.inventoryapp.data;
 
 import android.content.ContentProvider;
 import android.content.ContentValues;
+import android.content.Context;
 import android.database.Cursor;
 import android.net.Uri;
 
@@ -18,15 +19,14 @@ public class BookProvider extends ContentProvider {
      * Tag for the log messages
      */
     public static final String LOG_TAG = BookProvider.class.getSimpleName();
-
+    /**Database Helper object**/
+    private BookDbHelper mDbHelper;
     /**
      * Initialize the provider and the database helper object.
      */
     @Override
     public boolean onCreate() {
-        // TODO: Create and initialize a PetDbHelper object to gain access to the pets database.
-        // Make sure the variable is a global variable, so it can be referenced from other
-        // ContentProvider methods.
+        mDbHelper = new BookDbHelper(getContext());
         return true;
     }
 

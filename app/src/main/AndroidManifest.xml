@@ -29,10 +29,12 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".CatalogActivity" />
         </activity>
+        <!--android:name defines java class. android:authorities provides content URI-->
         <provider
             android:name=".data.BookProvider"
-            android:authorities="com.example.android.inventoryapp"
+            android:authorities="com.example.android.Books"
             android:exported="false" />
+        <!--android:exported tells whether the contentprovider in the app is visible to the external apps-->
     </application>
 
 </manifest>
