@@ -217,14 +217,37 @@ public class BookProvider extends ContentProvider {
      */
     @Override
     public int delete(@NonNull Uri uri, String selection, String[] selectionArgs) {
-        return 0;
+        // Get writeable database
+        SQLiteDatabase database = mDbHelper.getWritableDatabase();
+        final int match = sUriMatcher.match(uri);
+        switch (match) {
+            case Books:
+                // Delete all rows that match the selection and selection args
+                return database.delete(BookContract.BookEntry.TABLE_NAME, selection, selectionArgs);
+            case Books_ID:
+                // Delete a single row given by the ID in the URI
+                selection = BookContract.BookEntry._ID + "=?";
+                selectionArgs = new String[] { String.valueOf(ContentUris.parseId(uri)) };
+                return database.delete(BookContract.BookEntry.TABLE_NAME, selection, selectionArgs);
+            default:
+                throw new IllegalArgumentException("Deletion is not supported for " + uri);
+        }
     }
     /**
      * Returns the MIME type of data for the content URI.
      */
     @Override
     public String getType(@NonNull Uri uri) {
-        return null;
+        /*s refers to static in sUriMatcher*/
+        final int match = sUriMatcher.match(uri);
+        switch (match) {
+            case Books:
+                return BookContract.BookEntry.CONTENT_LIST_TYPE;
+            case Books_ID:
+                return BookContract.BookEntry.CONTENT_ITEM_TYPE;
+            default:
+                throw new IllegalStateException("Unknown URI " + uri + " with match " + match);
+        }
     }
-}
+}	
 
