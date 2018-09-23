@@ -34,7 +34,7 @@ public final class BookContract {
      * looking at pet data. content://com.example.android.pets/staff/ will fail,
      * as the ContentProvider hasn't been given any information on what to do with "staff".
      */
-    public static final String PATH_PETS = "Books";
+    public static final String PATH_BOOKS = "Books";
 
 
     /**
@@ -43,7 +43,7 @@ public final class BookContract {
      */
     public static final class BookEntry implements BaseColumns {
         /** The content URI to access the pet data in the provider */
-        public static final Uri CONTENT_URI = Uri.withAppendedPath(BASE_CONTENT_URI, PATH_PETS);
+        public static final Uri CONTENT_URI = Uri.withAppendedPath(BASE_CONTENT_URI, PATH_BOOKS);
 
         /**
          * Name of database table for books

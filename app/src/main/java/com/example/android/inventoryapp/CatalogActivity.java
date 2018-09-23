@@ -72,13 +72,6 @@ public class CatalogActivity extends AppCompatActivity {
      */
     @SuppressLint("SetTextI18n")
     private void displayDatabaseInfo() {
-        // To access our database, we instantiate our subclass of SQLiteOpenHelper
-        // and pass the context, which is the current activity.
-        BookDbHelper mDbHelper = new BookDbHelper(this);
-
-        // Create and/or open a database to read from it
-        SQLiteDatabase db = mDbHelper.getReadableDatabase();
-
         // Define my projection (column names)
         String[] projection = {
                 BookEntry._ID,
@@ -90,16 +83,12 @@ public class CatalogActivity extends AppCompatActivity {
                 BookEntry.COLUMN_PRICE
         };
 
-        // Perform an SQLite Query "SELECT * FROM Books"
-        // to get a Cursor that contains all rows from the BookEntry table.
-        Cursor cursor = db.query(
-                BookEntry.TABLE_NAME,
-                projection,
-                null,
-                null,
-                null,
-                null,
-                null);
+        Cursor cursor = getContentResolver().query(
+                BookEntry.CONTENT_URI, //the content URI
+                projection,            //The column to return for  each row
+                null,          //selection criteria
+                null,       //selection criteria
+                null);        //the sort order for returned rows
 
         // Display and log the table info e.g.: "The Books table contains 2 books."
         TextView displayView = findViewById(R.id.text_view_book);
