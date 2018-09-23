@@ -141,8 +141,10 @@ public class EditorActivity extends AppCompatActivity {
         String productNameString = mProductNameEditText.getText().toString().trim();
         String productAuthorString = mProductAuthorEditText.getText().toString().trim();
         String supplierPhoneString = mSupplierPhoneEditText.getText().toString().trim();
-        int quantityInt = Integer.parseInt(String.valueOf(mQuantityEditText));
-        int priceInt = Integer.parseInt(String.valueOf(mPriceEditText));
+        String quantityString = mQuantityEditText.getText().toString().trim();
+        int quantityInt = Integer.parseInt(quantityString);
+        String priceString = mPriceEditText.getText().toString().trim();
+        int priceInt = Integer.parseInt(priceString);
 
 
         // Create a new map of values, where column names are the keys
@@ -185,7 +187,7 @@ public class EditorActivity extends AppCompatActivity {
             case R.id.action_save:
                 // save with field validation
                 if (validation()) {
-                    Toast.makeText(getApplicationContext(), R.string.toast_error_saving_product_full, Toast.LENGTH_LONG).show();
+                    Toast.makeText(getApplicationContext(), R.string.toast_saving_product_full, Toast.LENGTH_LONG).show();
                     // Save book to database
                     insertBook();
                     // Exit activity

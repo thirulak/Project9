@@ -249,5 +249,5 @@ public class BookProvider extends ContentProvider {
                 throw new IllegalStateException("Unknown URI " + uri + " with match " + match);
         }
     }
-}	
+}
 

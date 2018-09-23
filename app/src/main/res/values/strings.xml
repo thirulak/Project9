@@ -26,10 +26,10 @@
     <!-- Label for price information in the editor [CHAR LIMIT=30] -->
     <string name="category_price">Price</string>
     <!-- Toast message in editor when new Book has been successfully inserted [CHAR LIMIT=NONE] -->
-    <string name="editor_insert_Book_successful">Pet saved</string>
+    <string name="editor_insert_Book_successful">Book saved</string>
 
     <!-- Toast message in editor when new Book has failed to be inserted [CHAR LIMIT=NONE] -->
-    <string name="editor_insert_Book_failed">Error with saving pet</string>
+    <string name="editor_insert_Book_failed">Error with saving Book</string>
 
 
     <!-- Label for cursor feedback message [CHAR LIMIT=30] -->
@@ -62,4 +62,5 @@
     <string name="action_insert_dummy_data">Insert Dummy Data</string>
     <string name="action_delete_all_entries">Delete All Books</string>
     <string name="cursor_message">The books table contains $1$d books.</string>
+    <string name="toast_saving_product_full">All Fields are filled correctly, Great job!</string>
 </resources>
