@@ -134,7 +134,17 @@ public class BookProvider extends ContentProvider {
      * for that specific row in the database.
      */
     private Uri insertPet(Uri uri, ContentValues values) {
-
+        // Check that the name is not null
+        String name = values.getAsString(BookContract.BookEntry.COLUMN_PRODUCT_NAME);
+        if (name == null) {
+            throw new IllegalArgumentException("Pet requires a name");
+        }
+        // If the weight is provided, check that it's greater than or equal to 0 kg
+        Integer quantity = values.getAsInteger(BookContract.BookEntry.COLUMN_QUANTITY);
+        if (quantity != null && quantity < 0) {
+            throw new IllegalArgumentException("Book requires valid quantity");
+        }
+        // No need to check the breed, any value is valid (including null).
         // Get writeable database
         SQLiteDatabase database = mDbHelper.getWritableDatabase();
         // Insert the new pet with the given values
