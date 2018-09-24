@@ -17,8 +17,11 @@ package com.example.android.inventoryapp;
 
 
 import android.annotation.SuppressLint;
+import android.app.LoaderManager;
 import android.content.ContentValues;
+import android.content.CursorLoader;
 import android.content.Intent;
+import android.content.Loader;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.net.Uri;
@@ -37,9 +40,11 @@ import com.example.android.inventoryapp.data.BookDbHelper;
 /**
  * Displays list of books that were entered and stored in the app.
  */
-public class CatalogActivity extends AppCompatActivity {
+public class CatalogActivity extends AppCompatActivity implements LoaderManager.LoaderCallbacks<Cursor>{
 
-    private BookDbHelper mDbHelper;
+    private static final int BOOK_LOADER = 0;
+    BookCursorAdapter mCursorAdapter;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -60,54 +65,19 @@ public class CatalogActivity extends AppCompatActivity {
         // Find and set empty view on the ListView, so that it only shows when the list has 0 items.
         View emptyView = findViewById(R.id.empty_view);
         BookListView.setEmptyView(emptyView);
-
-        mDbHelper = new BookDbHelper(this);
+        //setup up an adapter to create a list item for each row of Bookdata in the Cursor.
+        //There is no Book data yet(until the loader finishes) so pass in null for the Cursor.
+        mCursorAdapter = new BookCursorAdapter(this,null);
+        BookListView.setAdapter(mCursorAdapter);
+        //kick off the loader
+        getLoaderManager().initLoader(BOOK_LOADER,null,this);
     }
 
     // After the user has clicked Save in the Activity
-    @Override
-    protected void onStart() {
-        super.onStart();
-        displayDatabaseInfo();
-    }
-
-    /**
-     * Temporary helper method to display information in the onscreen TextView about the state of
-     * the books database.
-     */
-    @SuppressLint("SetTextI18n")
-    private void displayDatabaseInfo() {
-        // Define my projection (column names)
-        String[] projection = {
-                BookEntry._ID,
-                BookEntry.COLUMN_PRODUCT_NAME,
-                BookEntry.COLUMN_PRODUCT_AUTHOR,
-                BookEntry.COLUMN_SUPPLIER_NAME,
-                BookEntry.COLUMN_SUPPLIER_PHONE,
-                BookEntry.COLUMN_QUANTITY,
-                BookEntry.COLUMN_PRICE
-        };
-
-        Cursor cursor = getContentResolver().query(
-                BookEntry.CONTENT_URI, //the content URI
-                projection,            //The column to return for  each row
-                null,          //selection criteria
-                null,       //selection criteria
-                null);        //the sort order for returned rows
-
-        // Find the ListView which will be populated with the pet data
-        ListView BookListView = (ListView) findViewById(R.id.list);
-        // Setup an Adapter to create a list item for each row of pet data in the Cursor.
-        BookCursorAdapter adapter = new BookCursorAdapter(this, cursor);
-        // Attach the adapter to the ListView.
-        BookListView.setAdapter(adapter);
-    }
 
     private void insertBook() {
-        // Gets the data repository in write mode
-        SQLiteDatabase db = mDbHelper.getWritableDatabase();
-
-        // Create a new map of values, where column names are the keys
+        // Create a content values object where column names are the keys
+        //and Books attributes are the values
         ContentValues values = new ContentValues();
         values.put(BookEntry.COLUMN_PRODUCT_NAME, "Harrypotter");
         values.put(BookEntry.COLUMN_PRODUCT_AUTHOR, "J.K.Rowling");
@@ -117,8 +87,8 @@ public class CatalogActivity extends AppCompatActivity {
         values.put(BookEntry.COLUMN_PRICE, 300);
 
         // Insert a new row for Toto into the provider using the ContentResolver.
-        // Use the {@link PetEntry#CONTENT_URI} to indicate that we want to insert
-        // into the pets database table.
+        // Use the {@link BookEntry#CONTENT_URI} to indicate that we want to insert
+        // into the Books database table.
         // Receive the new content URI that will allow us to access Toto's data in the future.
         Uri newUri = getContentResolver().insert(BookEntry.CONTENT_URI, values);
     }
@@ -138,7 +108,6 @@ public class CatalogActivity extends AppCompatActivity {
             // Respond to a click on the "Insert dummy data" menu option
             case R.id.action_insert_dummy_data:
                 insertBook();
-                displayDatabaseInfo();
                 return true;
             // Respond to a click on the "Delete all entries" menu option
             case R.id.action_delete_all_entries:
@@ -171,6 +140,35 @@ public class CatalogActivity extends AppCompatActivity {
         } else {
             return getString(R.string.supplier_unknown);
         }
+    }
+
+    @Override
+    public Loader<Cursor> onCreateLoader(int id, Bundle args) {
+        //Define a projection that specifies the columns from the table we care about.
+        String[] projection = {
+                BookEntry._ID,
+                BookEntry.COLUMN_PRODUCT_NAME,
+                BookEntry.COLUMN_QUANTITY
+        };
+        //This loader will execute the ContentProvider's query method on a background thread
+        return new CursorLoader(this,
+                BookEntry.CONTENT_URI,
+                projection,
+                null,
+                null,
+                null);
+    }
+    @Override
+    public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
+        //{update @link BookCursorAdapter} with this new Cursor contining updated Booksdata
+        mCursorAdapter.swapCursor(data);
+
+    }
+
+    @Override
+    public void onLoaderReset(Loader<Cursor> loader) {
+     //callback called when the data is need to be deleted
+        mCursorAdapter.swapCursor(null);
     }
 }
 
