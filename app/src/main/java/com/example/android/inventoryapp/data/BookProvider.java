@@ -74,7 +74,7 @@ public class BookProvider extends ContentProvider {
         SQLiteDatabase database = mDbHelper.getReadableDatabase();
 
         // This cursor will hold the result of the query
-        Cursor cursor = null;
+        Cursor cursor ;
 
         // Figure out if the URI matcher can match the URI to a specific code
         int match = sUriMatcher.match(uri);
