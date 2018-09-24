@@ -111,6 +111,11 @@ public class BookProvider extends ContentProvider {
             default:
                 throw new IllegalArgumentException("Cannot query unknown URI " + uri);
         }
+        //Set notification URI on the cursor
+        //so we know what ContentURI the cursor is created for
+        //if the data at this URI changes, then we know we need to update the cursor.
+        cursor.setNotificationUri(getContext().getContentResolver(),uri);
+        //Return the cursor
         return cursor;
     }
 
@@ -154,6 +159,8 @@ public class BookProvider extends ContentProvider {
             Log.e(LOG_TAG, "Failed to insert row for " + uri);
             return null;
         }
+        //Notify all the listeners that the data has changed for the Book content Uri
+        getContext().getContentResolver().notifyChange(uri,null);
         // Once we know the ID of the new row in the table,
         // return the new URI with the ID appended to the end of it
         return ContentUris.withAppendedId(uri, id);
