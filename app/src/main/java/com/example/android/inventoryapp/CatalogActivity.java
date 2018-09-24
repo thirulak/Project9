@@ -25,11 +25,10 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.TextView;
+import android.widget.ListView;
 
 import com.example.android.inventoryapp.data.BookContract.BookEntry;
 import com.example.android.inventoryapp.data.BookDbHelper;
@@ -91,64 +90,12 @@ public class CatalogActivity extends AppCompatActivity {
                 null,       //selection criteria
                 null);        //the sort order for returned rows
 
-        // Display and log the table info e.g.: "The Books table contains 2 books."
-        TextView displayView = findViewById(R.id.text_view_book);
-        @SuppressLint({"StringFormatInvalid", "LocalSuppress"}) String cursorText = getString(R.string.cursor_message, cursor.getCount());
-        Log.v("CatalogActivity", cursorText);
-        displayView.setText(cursorText);
-
-        try {
-            // Create a header in the Text View that looks like this:
-            //
-            // The books table contains <number of rows in Cursor> books.
-            // _id - title - author - supplier - phone - quantity - price
-            //
-            // In the while loop below, iterate through the rows of the cursor and display
-            // the information from each column in this order.
-            displayView.setText("The Books table contains " + cursor.getCount() + " Book.\n\n");
-            displayView.append("\n\n" + BookEntry._ID + " - " +
-                    BookEntry.COLUMN_PRODUCT_NAME + " - " +
-                    BookEntry.COLUMN_PRODUCT_AUTHOR + " - " +
-                    BookEntry.COLUMN_SUPPLIER_NAME + " - " +
-                    BookEntry.COLUMN_SUPPLIER_PHONE + " - " +
-                    BookEntry.COLUMN_QUANTITY + " - " +
-                    BookEntry.COLUMN_PRICE + "\n");
-
-            // Figure out the index of each column
-            int idColumnIndex = cursor.getColumnIndex(BookEntry._ID);
-            int nameColumnIndex = cursor.getColumnIndex(BookEntry.COLUMN_PRODUCT_NAME);
-            int authorColumnIndex = cursor.getColumnIndex(BookEntry.COLUMN_PRODUCT_AUTHOR);
-            int supplierColumnIndex = cursor.getColumnIndex(BookEntry.COLUMN_SUPPLIER_NAME);
-            int phoneColumnIndex = cursor.getColumnIndex(BookEntry.COLUMN_SUPPLIER_PHONE);
-            int weightColumnIndex = cursor.getColumnIndex(BookEntry.COLUMN_QUANTITY);
-            int priceColumnIndex = cursor.getColumnIndex(BookEntry.COLUMN_PRICE);
-
-            // Iterate through all the returned rows in the cursor
-            while (cursor.moveToNext()) {
-                // Use that index to extract the String or Int value of the word
-                // at the current row the cursor is on.
-                int currentID = cursor.getInt(idColumnIndex);
-                String currentName = cursor.getString(nameColumnIndex);
-                String currentAuthor = cursor.getString(authorColumnIndex);
-                int currentSupplier = cursor.getInt(supplierColumnIndex);
-                String currentPhone = cursor.getString(phoneColumnIndex);
-                int currentWeight = cursor.getInt(weightColumnIndex);
-                int currentPrice = cursor.getInt(priceColumnIndex);
-
-                // Display the values from each column of the current row in the cursor in the TextView
-                displayView.append(("\n" + currentID + " - " +
-                        currentName + " - " +
-                        currentAuthor + " - " +
-                        convertSupplier(currentSupplier) + " - " +
-                        currentPhone + " - " +
-                        currentWeight + " - " +
-                        currentPrice));
-            }
-        } finally {
-            // Always close the cursor when you're done reading from it. This releases all its
-            // resources and makes it invalid.
-            cursor.close();
-        }
+        // Find the ListView which will be populated with the pet data
+        ListView BookListView = (ListView) findViewById(R.id.list);
+        // Setup an Adapter to create a list item for each row of pet data in the Cursor.
+        BookCursorAdapter adapter = new BookCursorAdapter(this, cursor);
+        // Attach the adapter to the ListView.
+        BookListView.setAdapter(adapter);
     }
 
     private void insertBook() {
@@ -170,7 +117,6 @@ public class CatalogActivity extends AppCompatActivity {
         // Receive the new content URI that will allow us to access Toto's data in the future.
         Uri newUri = getContentResolver().insert(BookEntry.CONTENT_URI, values);
     }
-
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
