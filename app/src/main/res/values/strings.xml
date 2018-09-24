@@ -63,4 +63,9 @@
     <string name="action_delete_all_entries">Delete All Books</string>
     <string name="cursor_message">The books table contains $1$d books.</string>
     <string name="toast_saving_product_full">All Fields are filled correctly, Great job!</string>
+    <!-- Title text for the empty view, which describes the empty dog house image [CHAR LIMIT=50] -->
+    <string name="empty_view_title_text">It\'s a bit lonely here...</string>
+    <!-- Subtitle text for the empty view that prompts the user to add a pet [CHAR LIMIT=50] -->
+    <string name="empty_view_subtitle_text">Get started by adding a Book</string>
+
 </resources>
