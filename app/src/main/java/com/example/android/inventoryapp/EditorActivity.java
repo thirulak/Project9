@@ -6,6 +6,7 @@ package com.example.android.inventoryapp;
 
 
 import android.content.ContentValues;
+import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.NavUtils;
@@ -77,6 +78,18 @@ public class EditorActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_editor);
+        //Examine the intent that was used to launch the activity
+        //inorder to figure out if we are creating a new book
+        Intent intent = getIntent();
+        Uri currentBookUri = intent.getData();
+        //if the intent doesnot contain a Book contentURI , then we know that we are creating a new book
+        if (currentBookUri == null) {
+            //this is a new book so change the appbar to say "add a Book"
+            setTitle("Add a Book");
+        } else {
+            //say "edit book"
+            setTitle(getString(R.string.editor_activity_title_edit_book));
+        }
 
         // Find all relevant views that we will need to read user input from
         mProductNameEditText = findViewById(R.id.edit_product_name);

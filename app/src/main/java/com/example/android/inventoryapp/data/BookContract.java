@@ -4,18 +4,15 @@ package com.example.android.inventoryapp.data;
  * Created by Meenakshi on 9/22/2018.
  */
 
+import android.content.ContentResolver;
 import android.net.Uri;
 import android.provider.BaseColumns;
-import android.content.ContentResolver;
+
 /**
  * API Contract for the Books app.
  */
 public final class BookContract {
 
-    // To prevent someone from accidentally instantiating the contract class,
-    // give it an empty constructor.
-    private BookContract() {
-    }
     /**
      * The "Content authority" is a name for the entire content provider, similar to the
      * relationship between a domain name and its website.  A convenient string to use for the
@@ -35,14 +32,19 @@ public final class BookContract {
      * as the ContentProvider hasn't been given any information on what to do with "staff".
      */
     public static final String PATH_BOOKS = "Books";
-
+    // To prevent someone from accidentally instantiating the contract class,
+    // give it an empty constructor.
+    private BookContract() {
+    }
 
     /**
      * Inner class that defines constant values for the books database table.
      * Each entry in the table represents a single book.
      */
     public static final class BookEntry implements BaseColumns {
-        /** The content URI to access the pet data in the provider */
+        /**
+         * The content URI to access the pet data in the provider
+         */
         public static final Uri CONTENT_URI = Uri.withAppendedPath(BASE_CONTENT_URI, PATH_BOOKS);
         /**
          * The MIME type of the {@link #CONTENT_URI} for a list of pets.

@@ -16,14 +16,13 @@ package com.example.android.inventoryapp;
  */
 
 
-import android.annotation.SuppressLint;
 import android.app.LoaderManager;
+import android.content.ContentUris;
 import android.content.ContentValues;
 import android.content.CursorLoader;
 import android.content.Intent;
 import android.content.Loader;
 import android.database.Cursor;
-import android.database.sqlite.SQLiteDatabase;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
@@ -31,16 +30,16 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ListView;
 
 import com.example.android.inventoryapp.data.BookContract.BookEntry;
-import com.example.android.inventoryapp.data.BookDbHelper;
 
 
 /**
  * Displays list of books that were entered and stored in the app.
  */
-public class CatalogActivity extends AppCompatActivity implements LoaderManager.LoaderCallbacks<Cursor>{
+public class CatalogActivity extends AppCompatActivity implements LoaderManager.LoaderCallbacks<Cursor> {
 
     private static final int BOOK_LOADER = 0;
     BookCursorAdapter mCursorAdapter;
@@ -67,10 +66,29 @@ public class CatalogActivity extends AppCompatActivity implements LoaderManager.
         BookListView.setEmptyView(emptyView);
         //setup up an adapter to create a list item for each row of Bookdata in the Cursor.
         //There is no Book data yet(until the loader finishes) so pass in null for the Cursor.
-        mCursorAdapter = new BookCursorAdapter(this,null);
+        mCursorAdapter = new BookCursorAdapter(this, null);
         BookListView.setAdapter(mCursorAdapter);
+        //setup item click listener
+        BookListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+
+                //create a new intent to go to {@Link EditorActivity}
+                Intent intent = new Intent(CatalogActivity.this, EditorActivity.class);
+                //form the content URI that represents the specific Book that was clicked on
+                //by appending the "id"(passed as input to this method)onto the
+                //{@link BookEntry#CONTENT_URI}
+                //for example the URI would be "content://com.example.android.books/books/2"
+                //if the book with ID 2 is clicked on
+                Uri currentBookUri = ContentUris.withAppendedId(BookEntry.CONTENT_URI, id);
+                //set the uri on the data field of the intent
+                intent.setData(currentBookUri);
+                //Launch the @link(EditorActivity) to display the data for the current Book
+                startActivity(intent);
+            }
+        });
         //kick off the loader
-        getLoaderManager().initLoader(BOOK_LOADER,null,this);
+        getLoaderManager().initLoader(BOOK_LOADER, null, this);
     }
 
     // After the user has clicked Save in the Activity
@@ -158,6 +176,7 @@ public class CatalogActivity extends AppCompatActivity implements LoaderManager.
                 null,
                 null);
     }
+
     @Override
     public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
         //{update @link BookCursorAdapter} with this new Cursor contining updated Booksdata
@@ -167,7 +186,7 @@ public class CatalogActivity extends AppCompatActivity implements LoaderManager.
 
     @Override
     public void onLoaderReset(Loader<Cursor> loader) {
-     //callback called when the data is need to be deleted
+        //callback called when the data is need to be deleted
         mCursorAdapter.swapCursor(null);
     }
 }
