@@ -4,9 +4,13 @@ package com.example.android.inventoryapp;
  * Created by Meenakshi on 9/22/2018.
  */
 
-
+import android.annotation.SuppressLint;
+import android.app.LoaderManager;
 import android.content.ContentValues;
+import android.content.CursorLoader;
 import android.content.Intent;
+import android.content.Loader;
+import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.NavUtils;
@@ -26,7 +30,16 @@ import com.example.android.inventoryapp.data.BookContract.BookEntry;
 /**
  * Allows user to create a new book or edit an existing one.
  */
-public class EditorActivity extends AppCompatActivity {
+public class EditorActivity extends AppCompatActivity implements LoaderManager.LoaderCallbacks<Cursor> {
+
+    /**
+     * Identifier for the Book data loader
+     **/
+    private static final int EXISTING_BOOK_LOADER = 0;
+    /**
+     * content URI for the existing Book(null if its a new book)
+     */
+    private Uri mCurrentBookUri;
 
     /**
      * EditText field to enter the book's name
@@ -81,14 +94,17 @@ public class EditorActivity extends AppCompatActivity {
         //Examine the intent that was used to launch the activity
         //inorder to figure out if we are creating a new book
         Intent intent = getIntent();
-        Uri currentBookUri = intent.getData();
+        mCurrentBookUri = intent.getData();
         //if the intent doesnot contain a Book contentURI , then we know that we are creating a new book
-        if (currentBookUri == null) {
+        if (mCurrentBookUri == null) {
             //this is a new book so change the appbar to say "add a Book"
             setTitle("Add a Book");
         } else {
             //say "edit book"
             setTitle(getString(R.string.editor_activity_title_edit_book));
+            // Initialize a loader to read the Book data from the database
+            // and display the current values in the editor
+            getLoaderManager().initLoader(EXISTING_BOOK_LOADER, null, this);
         }
 
         // Find all relevant views that we will need to read user input from
@@ -223,6 +239,89 @@ public class EditorActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
+    @Override
+    public Loader<Cursor> onCreateLoader(int i, Bundle bundle) {
+        // Since the editor shows all pet attributes, define a projection that contains
+        // all columns from the pet table
+        String[] projection = {
+                BookEntry._ID,
+                BookEntry.COLUMN_PRODUCT_NAME,
+                BookEntry.COLUMN_PRODUCT_AUTHOR,
+                BookEntry.COLUMN_SUPPLIER_NAME,
+                BookEntry.COLUMN_SUPPLIER_PHONE,
+                BookEntry.COLUMN_QUANTITY,
+                BookEntry.COLUMN_PRICE
+        };
+        // This loader will execute the ContentProvider's query method on a background thread
+        return new CursorLoader(this,   // Parent activity context
+                mCurrentBookUri,         // Query the content URI for the current Book
+                projection,             // Columns to include in the resulting Cursor
+                null,                   // No selection clause
+                null,                   // No selection arguments
+                null);                  // Default sort order
+    }
+
+    @SuppressLint("SetTextI18n")
+    @Override
+    public void onLoadFinished(Loader<Cursor> loader, Cursor cursor) {
+        // Bail early if the cursor is null or there is less than 1 row in the cursor
+        if (cursor == null || cursor.getCount() < 1) {
+            return;
+        }
+        // Proceed with moving to the first row of the cursor and reading data from it
+        // (This should be the only row in the cursor)
+        if (cursor.moveToFirst()) {
+            // Find the columns of pet attributes that we're interested in
+            int productnameColumnIndex = cursor.getColumnIndex(BookEntry.COLUMN_PRODUCT_NAME);
+            int productauthorColumnIndex = cursor.getColumnIndex(BookEntry.COLUMN_PRODUCT_AUTHOR);
+            int suppliernameColumnIndex = cursor.getColumnIndex(BookEntry.COLUMN_SUPPLIER_NAME);
+            int supplierphoneColumnIndex = cursor.getColumnIndex(BookEntry.COLUMN_SUPPLIER_PHONE);
+            int quantityColumnIndex = cursor.getColumnIndex(BookEntry.COLUMN_QUANTITY);
+            int priceColumnIndex = cursor.getColumnIndex(BookEntry.COLUMN_PRICE);
+            // Extract out the value from the Cursor for the given column index
+            String name = cursor.getString(productnameColumnIndex);
+            String author = cursor.getString(productauthorColumnIndex);
+            int suppliername = cursor.getInt(suppliernameColumnIndex);
+            int supplierphone = cursor.getInt(supplierphoneColumnIndex);
+            int quantity = cursor.getInt(quantityColumnIndex);
+            int price = cursor.getInt(priceColumnIndex);
+
+            // Update the views on the screen with the values from the database
+            mProductNameEditText.setText(name);
+            mProductAuthorEditText.setText(author);
+            mSupplierPhoneEditText.setText(Integer.toString(supplierphone));
+            mQuantityEditText.setText(Integer.toString(quantity));
+            mPriceEditText.setText(Integer.toString(price));
+            // Gender is a dropdown spinner, so map the constant value from the database
+            // into one of the dropdown options (0 is Unknown, 1 is Male, 2 is Female).
+            // Then call setSelection() so that option is displayed on screen as the current selection.
+            switch (suppliername) {
+                case BookEntry.SUPPLIER_1:
+                    mSupplierSpinner.setSelection(1);
+                    break;
+                case BookEntry.SUPPLIER_2:
+                    mSupplierSpinner.setSelection(2);
+                    break;
+                case BookEntry.SUPPLIER_3:
+                    mSupplierSpinner.setSelection(3);
+                    break;
+                default:
+                    mSupplierSpinner.setSelection(0);
+                    break;
+            }
+        }
+    }
+
+    @Override
+    public void onLoaderReset(Loader<Cursor> loader) {
+        // If the loader is invalidated, clear out all the data from the input fields.
+        mProductNameEditText.setText("");
+        mProductAuthorEditText.setText("");
+        mSupplierPhoneEditText.setText("");
+        mQuantityEditText.setText("");
+        mPriceEditText.setText("");
+        mSupplierSpinner.setSelection(0); // Select "Unknown" supplier
+    }
     /**
      * General validation that checks if all required fields are filled in before
      * saving.
