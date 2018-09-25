@@ -162,9 +162,9 @@ public class EditorActivity extends AppCompatActivity implements LoaderManager.L
     }
 
     /**
-     * Get user input from editor and save new book into the database
+     * Get user input from editor and save book into the database
      */
-    private void insertBook() {
+    private void saveBook() {
         // Read from input fields
         // Use trim to eliminate leading or trailing white space
         String productNameString = mProductNameEditText.getText().toString().trim();
@@ -175,7 +175,6 @@ public class EditorActivity extends AppCompatActivity implements LoaderManager.L
         String priceString = mPriceEditText.getText().toString().trim();
         int priceInt = Integer.parseInt(priceString);
 
-
         // Create a new map of values, where column names are the keys
         ContentValues values = new ContentValues();
         values.put(BookEntry.COLUMN_PRODUCT_NAME, productNameString);
@@ -184,19 +183,37 @@ public class EditorActivity extends AppCompatActivity implements LoaderManager.L
         values.put(BookEntry.COLUMN_SUPPLIER_PHONE, supplierPhoneString);
         values.put(BookEntry.COLUMN_QUANTITY, quantityInt);
         values.put(BookEntry.COLUMN_PRICE, priceInt);
-
-        // Insert a new pet into the provider, returning the content URI for the new pet.
-        Uri newUri = getContentResolver().insert(BookEntry.CONTENT_URI, values);
-
-        // Show a toast message depending on whether or not the insertion was successful
-        if (newUri == null) {
-            // If the new content URI is null, then there was an error with insertion.
-            Toast.makeText(this, getString(R.string.editor_insert_Book_failed),
-                    Toast.LENGTH_SHORT).show();
+        // Determine if this is a new or existing book by checking if mCurrentBookUri is null or not
+        if (mCurrentBookUri == null) {
+            // This is a NEW Book, so insert a new Book into the provider,
+            // returning the content URI for the new book.
+            Uri newUri = getContentResolver().insert(BookEntry.CONTENT_URI, values);
+            // Show a toast message depending on whether or not the insertion was successful.
+            if (newUri == null) {
+                // If the new content URI is null, then there was an error with insertion.
+                Toast.makeText(this, getString(R.string.editor_insert_Book_failed),
+                        Toast.LENGTH_SHORT).show();
+            } else {
+                // Otherwise, the insertion was successful and we can display a toast.
+                Toast.makeText(this, getString(R.string.editor_insert_Book_successful),
+                        Toast.LENGTH_SHORT).show();
+            }
         } else {
-            // Otherwise, the insertion was successful and we can display a toast.
-            Toast.makeText(this, getString(R.string.editor_insert_Book_successful),
-                    Toast.LENGTH_SHORT).show();
+            // Otherwise this is an EXISTING book, so update the book with content URI: mCurrentBookUri
+            // and pass in the new ContentValues. Pass in null for the selection and selection args
+            // because mCurrentBookUri will already identify the correct row in the database that
+            // we want to modify.
+            int rowsAffected = getContentResolver().update(mCurrentBookUri, values, null, null);
+            // Show a toast message depending on whether or not the update was successful.
+            if (rowsAffected == 0) {
+                // If no rows were affected, then there was an error with the update.
+                Toast.makeText(this, getString(R.string.editor_update_Book_failed),
+                        Toast.LENGTH_SHORT).show();
+            } else {
+                // Otherwise, the update was successful and we can display a toast.
+                Toast.makeText(this, getString(R.string.editor_update_Book_successful),
+                        Toast.LENGTH_SHORT).show();
+            }
         }
     }
 
@@ -218,7 +235,7 @@ public class EditorActivity extends AppCompatActivity implements LoaderManager.L
                 if (validation()) {
                     Toast.makeText(getApplicationContext(), R.string.toast_saving_product_full, Toast.LENGTH_LONG).show();
                     // Save book to database
-                    insertBook();
+                    saveBook();
                     // Exit activity
                     finish();
                     return true;
@@ -322,6 +339,7 @@ public class EditorActivity extends AppCompatActivity implements LoaderManager.L
         mPriceEditText.setText("");
         mSupplierSpinner.setSelection(0); // Select "Unknown" supplier
     }
+
     /**
      * General validation that checks if all required fields are filled in before
      * saving.
