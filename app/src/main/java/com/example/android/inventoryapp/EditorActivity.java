@@ -174,8 +174,18 @@ public class EditorActivity extends AppCompatActivity implements LoaderManager.L
         int quantityInt = Integer.parseInt(quantityString);
         String priceString = mPriceEditText.getText().toString().trim();
         int priceInt = Integer.parseInt(priceString);
+        // Check if this is supposed to be a new book
+        // and check if all the fields in the editor are blank
+        if (mCurrentBookUri == null &&
+                TextUtils.isEmpty(productNameString) && TextUtils.isEmpty(productAuthorString) &&
+                TextUtils.isEmpty(supplierPhoneString) && TextUtils.isEmpty(quantityString) &&
+                TextUtils.isEmpty(priceString) && mSupplierName == BookEntry.SUPPLIER_SELECT) {
+            // Since no fields were modified, we can return early without creating a new book.
+            // No need to create ContentValues and no need to do any ContentProvider operations.
+            return;
+        }
 
-        // Create a new map of values, where column names are the keys
+    // Create a new map of values, where column names are the keys
         ContentValues values = new ContentValues();
         values.put(BookEntry.COLUMN_PRODUCT_NAME, productNameString);
         values.put(BookEntry.COLUMN_PRODUCT_AUTHOR, productAuthorString);
@@ -183,6 +193,12 @@ public class EditorActivity extends AppCompatActivity implements LoaderManager.L
         values.put(BookEntry.COLUMN_SUPPLIER_PHONE, supplierPhoneString);
         values.put(BookEntry.COLUMN_QUANTITY, quantityInt);
         values.put(BookEntry.COLUMN_PRICE, priceInt);
+    // If the price is not provided by the user, don't try to parse the string into an
+    // integer value. Use 0 by default.
+    int price = 0;
+        if (!TextUtils.isEmpty(priceString)) {
+        price = Integer.parseInt(priceString);
+    }
         // Determine if this is a new or existing book by checking if mCurrentBookUri is null or not
         if (mCurrentBookUri == null) {
             // This is a NEW Book, so insert a new Book into the provider,
