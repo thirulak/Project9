@@ -29,7 +29,6 @@ import android.widget.Spinner;
 import android.widget.Toast;
 
 import com.example.android.inventoryapp.data.BookContract.BookEntry;
-import com.example.android.inventoryapp.data.BookDbHelper;
 
 /**
  * Allows user to create a new book or edit an existing one.
@@ -270,6 +269,7 @@ public class EditorActivity extends AppCompatActivity implements LoaderManager.L
         getMenuInflater().inflate(R.menu.menu_editor, menu);
         return true;
     }
+
     /**
      * This method is called after invalidateOptionsMenu(), so that the
      * menu can be updated (some menu items can be hidden or made visible).
@@ -305,7 +305,8 @@ public class EditorActivity extends AppCompatActivity implements LoaderManager.L
                 }
                 // Respond to a click on the "Delete" menu option
             case R.id.action_delete:
-                // Do nothing for now
+                // Pop up confirmation dialog for deletion
+                showDeleteConfirmationDialog();
                 return true;
             // Respond to a click on the "Up" arrow button in the app bar
             case android.R.id.home:
@@ -469,13 +470,65 @@ public class EditorActivity extends AppCompatActivity implements LoaderManager.L
         alertDialog.show();
     }
 
+    /**
+     * Prompt the user to confirm that they want to delete this book.
+     */
+    private void showDeleteConfirmationDialog() {
+        // Create an AlertDialog.Builder and set the message, and click listeners
+        // for the postivie and negative buttons on the dialog.
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setMessage(R.string.delete_dialog_msg);
+        builder.setPositiveButton(R.string.delete, new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int id) {
+                // User clicked the "Delete" button, so delete the book.
+                deleteBook();
+            }
+        });
+        builder.setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int id) {
+                // User clicked the "Cancel" button, so dismiss the dialog
+                // and continue editing the pet.
+                if (dialog != null) {
+                    dialog.dismiss();
+                }
+            }
+        });
+        // Create and show the AlertDialog
+        AlertDialog alertDialog = builder.create();
+        alertDialog.show();
+    }
 
     /**
-     * General validation that checks if all required fields are filled in before
-     * saving.
-     *
-     * @return true if pass, false if fail.
+     * Perform the deletion of the book in the database.
      */
+    private void deleteBook() {
+        // Only perform the delete if this is an existing book.
+        if (mCurrentBookUri != null) {
+            // Call the ContentResolver to delete the pet at the given content URI.
+            // Pass in null for the selection and selection args because the mCurrentBookUri
+            // content URI already identifies the book that we want.
+            int rowsDeleted = getContentResolver().delete(mCurrentBookUri, null, null);
+            // Show a toast message depending on whether or not the delete was successful.
+            if (rowsDeleted == 0) {
+                // If no rows were deleted, then there was an error with the delete.
+                Toast.makeText(this, getString(R.string.editor_delete_Book_failed),
+                        Toast.LENGTH_SHORT).show();
+            } else {
+                // Otherwise, the delete was successful and we can display a toast.
+                Toast.makeText(this, getString(R.string.editor_delete_Book_successful),
+                        Toast.LENGTH_SHORT).show();
+            }
+        }
+        // Close the activity
+        finish();
+    }
+
+        /**
+         * General validation that checks if all required fields are filled in before
+         * saving.
+         *
+         * @return true if pass, false if fail.
+         */
 
     public boolean validation() {
         // Get text from editor and trim off any leading white space
