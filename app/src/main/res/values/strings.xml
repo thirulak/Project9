@@ -87,6 +87,7 @@
     <string name="delete">Delete</string>
     <!-- Dialog button text for the option to cancel deletion of the current book [CHAR LIMIT=20] -->
     <string name="cancel">Cancel</string>
+    <string name="unknown_supplier">unknown supplier</string>
 
 
 </resources>
