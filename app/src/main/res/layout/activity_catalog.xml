@@ -61,6 +61,7 @@
         android:layout_margin="@dimen/fab_margin"
         android:adjustViewBounds="false"
         android:scaleType="center"
+        app:backgroundTint="@color/colorPrimary"
         android:src="@drawable/ic_add_book"
         app:fabSize="normal" />
 </RelativeLayout>

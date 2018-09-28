@@ -27,6 +27,5 @@
 
     <!-- Background color -->
     <color name="colorListBackground">#FB8B24</color>
-    <!--Button color-->
     <color name="colorPrimaryOpaque">#A1887F</color>
 </resources>
