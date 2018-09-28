@@ -88,6 +88,12 @@
     <!-- Dialog button text for the option to cancel deletion of the current book [CHAR LIMIT=20] -->
     <string name="cancel">Cancel</string>
     <string name="unknown_supplier">unknown supplier</string>
+    <string name="category_measurement">Price per Item</string>
+    <string name="unit_product_price">Rs.</string>
+    <string name="noLessQuantity">noLessQuantity</string>
+    <string name="order">Order</string>
+    <string name="decrement">-</string>
+    <string name="increment">+</string>
 
 
 </resources>

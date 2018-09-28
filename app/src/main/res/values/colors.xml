@@ -11,10 +11,10 @@
 -->
 <resources>
     <!-- Darker variant for the status bar and contextual app bars -->
-    <color name="colorPrimaryDark">#9A031E</color>
+    <color name="colorPrimaryDark">#FFF97917</color>
 
     <!-- The app branding color for the app bar -->
-    <color name="colorPrimary">#9A031E</color>
+    <color name="colorPrimary">#FF6F00</color>
 
     <!-- Accent color for UI controls like checkboxes and text fields -->
     <color name="colorAccent">#000000</color>
@@ -27,5 +27,6 @@
 
     <!-- Background color -->
     <color name="colorListBackground">#FB8B24</color>
-
+    <!--Button color-->
+    <color name="colorPrimaryOpaque">#A1887F</color>
 </resources>

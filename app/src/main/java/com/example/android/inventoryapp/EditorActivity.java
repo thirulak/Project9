@@ -39,41 +39,36 @@ public class EditorActivity extends AppCompatActivity implements LoaderManager.L
      * Identifier for the Book data loader
      **/
     private static final int EXISTING_BOOK_LOADER = 0;
+    int quantity = 0;
+    int price=0;
     /**
      * content URI for the existing Book(null if its a new book)
      */
     private Uri mCurrentBookUri;
-
     /**
      * EditText field to enter the book's name
      */
     private EditText mProductNameEditText;
-
     /**
      * EditText field to enter the book's author
      */
     private EditText mProductAuthorEditText;
-
     /**
      * EditText field to enter the book's supplier
      */
     private Spinner mSupplierSpinner;
-
     /**
      * EditText field to enter the book's phone
      */
     private EditText mSupplierPhoneEditText;
-
     /**
      * EditText field to enter the book's quantity
      */
     private EditText mQuantityEditText;
-
     /**
      * EditText field to enter the book's price
      */
     private EditText mPriceEditText;
-
     /**
      * Values for validation
      */
@@ -82,7 +77,6 @@ public class EditorActivity extends AppCompatActivity implements LoaderManager.L
     private String supplierPhoneString;
     private int quantityInt;
     private int priceInt;
-
     /**
      * Supplier of the book. The possible valid values are in the BookContract.java file:
      * {@link BookEntry#SUPPLIER_SELECT}, {@link BookEntry#SUPPLIER_1}, {@link BookEntry#SUPPLIER_2
@@ -523,12 +517,12 @@ public class EditorActivity extends AppCompatActivity implements LoaderManager.L
         finish();
     }
 
-        /**
-         * General validation that checks if all required fields are filled in before
-         * saving.
-         *
-         * @return true if pass, false if fail.
-         */
+    /**
+     * General validation that checks if all required fields are filled in before
+     * saving.
+     *
+     * @return true if pass, false if fail.
+     */
 
     public boolean validation() {
         // Get text from editor and trim off any leading white space
@@ -560,5 +554,28 @@ public class EditorActivity extends AppCompatActivity implements LoaderManager.L
                 priceInt != -1 &&
                 // no supplier selected
                 mSupplierName != 0;
+    }
+
+    public void increment(View view) {
+        quantity++;
+        price++;
+        displayQuantity();
+        displayprice();
+    }
+
+    public void decrement(View view) {
+        if (quantity == 0) {
+            Toast.makeText(this, R.string.noLessQuantity, Toast.LENGTH_SHORT).show();
+        } else {
+            quantity--;
+            price--;
+            displayQuantity();
+            displayprice();
+        }
+    }
+    public void displayQuantity() {
+        mQuantityEditText.setText(String.valueOf(quantity));
+    }
+    private void displayprice() { mPriceEditText.setText(String.valueOf(price));
     }
 }
