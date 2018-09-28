@@ -19,5 +19,6 @@
     <dimen name="button_text">24sp</dimen>
     <dimen name="add_quantity_text">26sp</dimen>
     <dimen name="textsize">28sp</dimen>
+    <dimen name="listmargin">54dp</dimen>
 </resources>
 
