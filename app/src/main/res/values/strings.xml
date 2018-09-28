@@ -68,8 +68,8 @@
     <!-- Subtitle text for the empty view that prompts the user to add a pet [CHAR LIMIT=50] -->
     <string name="empty_view_subtitle_text">Get started by adding a Book</string>
     <string name="editor_activity_title_edit_book">Edit Book</string>
-    <string name="editor_update_Book_failed">update book</string>
-    <string name="editor_update_Book_successful">error updating book</string>
+    <string name="editor_update_Book_failed">error updating Book</string>
+    <string name="editor_update_Book_successful">update Book successfull</string>
 
     <!-- Dialog message when user is leaving editor but hasn't saved changes [CHAR LIMIT=NONE] -->
     <string name="unsaved_changes_dialog_msg">Discard your changes and quit editing?</string>
