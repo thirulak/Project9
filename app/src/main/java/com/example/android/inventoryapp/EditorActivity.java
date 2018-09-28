@@ -40,7 +40,7 @@ public class EditorActivity extends AppCompatActivity implements LoaderManager.L
      **/
     private static final int EXISTING_BOOK_LOADER = 0;
     int quantity = 0;
-    int price=0;
+    int price = 0;
     /**
      * content URI for the existing Book(null if its a new book)
      */
@@ -558,7 +558,6 @@ public class EditorActivity extends AppCompatActivity implements LoaderManager.L
 
     public void increment(View view) {
         quantity++;
-        price++;
         displayQuantity();
         displayprice();
     }
@@ -568,14 +567,17 @@ public class EditorActivity extends AppCompatActivity implements LoaderManager.L
             Toast.makeText(this, R.string.noLessQuantity, Toast.LENGTH_SHORT).show();
         } else {
             quantity--;
-            price--;
             displayQuantity();
             displayprice();
+
         }
     }
+
     public void displayQuantity() {
         mQuantityEditText.setText(String.valueOf(quantity));
     }
-    private void displayprice() { mPriceEditText.setText(String.valueOf(price));
+
+    private void displayprice() {
+        mPriceEditText.setText(String.valueOf(quantity * 100));
     }
 }
