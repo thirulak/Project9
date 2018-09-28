@@ -69,7 +69,7 @@
     <string name="empty_view_subtitle_text">Get started by adding a Book</string>
     <string name="editor_activity_title_edit_book">Edit Book</string>
     <string name="editor_update_Book_failed">error updating Book</string>
-    <string name="editor_update_Book_successful">update Book successfull</string>
+    <string name="editor_update_Book_successful">update Book successful</string>
 
     <!-- Dialog message when user is leaving editor but hasn't saved changes [CHAR LIMIT=NONE] -->
     <string name="unsaved_changes_dialog_msg">Discard your changes and quit editing?</string>
@@ -91,9 +91,9 @@
     <string name="category_measurement">Price per Item</string>
     <string name="unit_product_price">Rs.</string>
     <string name="noLessQuantity">noLessQuantity</string>
-    <string name="order">Order</string>
     <string name="decrement">-</string>
     <string name="increment">+</string>
+    <string name="sale">sale</string>
 
 
 </resources>
