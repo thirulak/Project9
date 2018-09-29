@@ -198,7 +198,7 @@ public class BookProvider extends ContentProvider {
         if (values.containsKey(BookContract.BookEntry.COLUMN_PRODUCT_NAME)) {
             String name = values.getAsString(BookContract.BookEntry.COLUMN_PRODUCT_NAME);
             if (name == null) {
-                throw new IllegalArgumentException("Pet requires a name");
+                throw new IllegalArgumentException("Book requires a name");
             }
         }
         // If the {@link BookEntry#COLUMN_QUANTITY} key is present,
@@ -207,7 +207,7 @@ public class BookProvider extends ContentProvider {
             // Check that the weight is greater than or equal to 0 kg
             Integer quantity = values.getAsInteger(BookContract.BookEntry.COLUMN_QUANTITY);
             if (quantity != null && quantity < 0) {
-                throw new IllegalArgumentException("Pet requires valid weight");
+                throw new IllegalArgumentException("Book requires valid weight");
             }
         }
         if (values.size() == 0) {

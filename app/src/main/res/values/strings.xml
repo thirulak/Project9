@@ -94,6 +94,7 @@
     <string name="decrement">-</string>
     <string name="increment">+</string>
     <string name="sale">sale</string>
+    <string name="sell_product_failed">Quantity value invalid!</string>
 
 
 </resources>

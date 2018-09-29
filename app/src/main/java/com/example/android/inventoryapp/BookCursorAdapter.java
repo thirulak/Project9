@@ -4,14 +4,18 @@ package com.example.android.inventoryapp;
  * Created by Meenakshi on 9/24/2018.
  */
 
+import android.content.ContentUris;
+import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
+import android.net.Uri;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.text.TextUtils;
 import android.view.ViewGroup;
 import android.widget.CursorAdapter;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.android.inventoryapp.data.BookContract;
 
@@ -46,6 +50,7 @@ public class BookCursorAdapter extends CursorAdapter {
         // Inflate a list item view using the layout specified in list_item.xml
         return LayoutInflater.from(context).inflate(R.layout.list_item, parent, false);
     }
+
     /**
      * This method binds the Book data (in the current row pointed to by cursor) to the given
      * list item layout. For example, the name for the current pet can be set on the name TextView
@@ -57,24 +62,44 @@ public class BookCursorAdapter extends CursorAdapter {
      *                correct row.
      */
     @Override
-    public void bindView(View view, Context context, Cursor cursor) {
+    public void bindView(View view, final Context context, Cursor cursor) {
+        final long id;
+        final int mQuantity;
+        id = cursor.getLong(cursor.getColumnIndex(BookContract.BookEntry._ID));
         // Find individual views that we want to modify in the list item layout
         TextView nameTextView = (TextView) view.findViewById(R.id.name);
-        TextView summaryTextView = (TextView) view.findViewById(R.id.summary);
+        TextView quantityTextView = (TextView) view.findViewById(R.id.quantity);
+        TextView buyTextView = (TextView) view.findViewById(R.id.buy);
+
         // Find the columns of Book attributes that we're interested in
         int nameColumnIndex = cursor.getColumnIndex(BookContract.BookEntry.COLUMN_PRODUCT_NAME);
         int quantityColumnIndex = cursor.getColumnIndex(BookContract.BookEntry.COLUMN_QUANTITY);
-        // Read the Book attributes from the Cursor for the current pet
-        String BookName = cursor.getString(nameColumnIndex);
-        String BookQuantity = cursor.getString(quantityColumnIndex);
-        // If the pet breed is empty string or null, then use some default text
-        // that says "Unknown breed", so the TextView isn't blank.
-        if (TextUtils.isEmpty(BookQuantity)) {
-            BookQuantity = context.getString(R.string.unknown_supplier);
-        }
+        // Read the Book attributes from the Cursor for the current book
+        final String BookName = cursor.getString(nameColumnIndex);
+        final String BookQuantity = cursor.getString(quantityColumnIndex);
+        mQuantity = Integer.parseInt(BookQuantity);
+
         // Update the TextViews with the attributes for the current pet
         nameTextView.setText(BookName);
-        summaryTextView.setText(BookQuantity);
+        quantityTextView.setText(BookQuantity);
+
+        buyTextView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (v != null) {
+                    ContentValues values = new ContentValues();
+                    values.put(BookContract.BookEntry.COLUMN_PRODUCT_NAME, BookName);
+                    values.put(BookContract.BookEntry.COLUMN_QUANTITY, BookQuantity);
+
+                    Uri currentInventoryUri = ContentUris.withAppendedId(BookContract.BookEntry.CONTENT_URI, id);
+
+                    int rowsAffected = context.getContentResolver().update(currentInventoryUri, values, null, null);
+                    if (rowsAffected == 0 || mQuantity == 0) {
+                        Toast.makeText(context, context.getString(R.string.sell_product_failed), Toast.LENGTH_SHORT).show();
+                    }
+                }
+            }
+        });
     }
 }
 
