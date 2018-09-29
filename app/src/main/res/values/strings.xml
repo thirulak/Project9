@@ -95,6 +95,7 @@
     <string name="increment">+</string>
     <string name="sale">sale</string>
     <string name="sell_product_failed">Quantity value invalid!</string>
+    <string name="call">call</string>
 
 
 </resources>

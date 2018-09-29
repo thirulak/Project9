@@ -91,6 +91,15 @@
         <item name="android:layout_gravity">center</item>
         <item name="android:textColor">@color/colorPrimary</item>
     </style>
+    <style name="CallButton">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:background">@drawable/button</item>
+        <item name="android:paddingLeft">@dimen/general_margin</item>
+        <item name="android:paddingRight">@dimen/general_margin</item>
+        <item name="android:textColor">#FFFFFF</item>
+        <item name="android:layout_gravity">center_horizontal</item>
+    </style>
 
 
 </resources>

@@ -149,4 +149,9 @@
             android:onClick="increment"
             android:text="@string/increment" />
     </LinearLayout>
+    <Button
+        android:id="@+id/button_order"
+        style="@style/CallButton"
+        android:text="@string/call"
+        android:autoLink="phone"/>
 </LinearLayout>
