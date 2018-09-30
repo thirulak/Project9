@@ -47,25 +47,26 @@
             android:layout_width="wrap_content"
             android:layout_height="37dp"
             android:layout_marginLeft="@dimen/spacing1"
+            android:layout_marginStart="@dimen/spacing1"
             android:background="@color/colorPrimaryDark"
             android:gravity="center"
             android:text="@string/order"
             android:textAllCaps="true"
             android:textColor="#FFFFFF"
-            android:textSize="@dimen/textsize"
-            android:layout_marginStart="@dimen/spacing1" />
+            android:textSize="@dimen/textsize" />
+
         <TextView
             android:id="@+id/phone"
             android:layout_width="wrap_content"
             android:layout_height="37dp"
             android:layout_marginLeft="@dimen/spacing1"
+            android:layout_marginStart="@dimen/spacing1"
             android:background="@color/colorPrimaryDark"
             android:gravity="center"
             android:text="@string/call"
             android:textAllCaps="true"
             android:textColor="#FFFFFF"
-            android:textSize="@dimen/textsize"
-            android:layout_marginStart="@dimen/spacing1" />
+            android:textSize="@dimen/textsize" />
     </LinearLayout>
 </RelativeLayout>
 

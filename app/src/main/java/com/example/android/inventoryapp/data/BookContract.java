@@ -32,6 +32,7 @@ public final class BookContract {
      * as the ContentProvider hasn't been given any information on what to do with "staff".
      */
     public static final String PATH_BOOKS = "Books";
+
     // To prevent someone from accidentally instantiating the contract class,
     // give it an empty constructor.
     private BookContract() {

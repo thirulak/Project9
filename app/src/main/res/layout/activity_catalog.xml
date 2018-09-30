@@ -51,6 +51,7 @@
             android:textColor="#A2AAB0"
             tools:targetApi="jelly_bean" />
     </RelativeLayout>
+
     <android.support.design.widget.FloatingActionButton
         android:id="@+id/fab"
         android:layout_width="wrap_content"
@@ -61,7 +62,7 @@
         android:layout_margin="@dimen/fab_margin"
         android:adjustViewBounds="false"
         android:scaleType="center"
-        app:backgroundTint="@color/colorPrimary"
         android:src="@drawable/ic_add_book"
+        app:backgroundTint="@color/colorPrimary"
         app:fabSize="normal" />
 </RelativeLayout>
