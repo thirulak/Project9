@@ -1,53 +1,72 @@
 <?xml version="1.0" encoding="utf-8"?><!-- Layout for a single list item in the list of pets -->
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:baselineAligned="false"
     android:orientation="horizontal"
-    android:padding="@dimen/activity_margin"
-    android:baselineAligned="false">
+    android:padding="@dimen/activity_margin">
     <!--To make the horizontal layout work perfectly ,width is given as 0dp-->
-
-    <LinearLayout
-        android:id="@+id/item1"
+    <TextView
+        android:id="@+id/name"
         android:layout_width="wrap_content"
-        android:layout_height="40dp"
-        android:layout_weight="3"
-        android:orientation="vertical">
+        android:layout_height="wrap_content"
+        android:fontFamily="sans-serif-medium"
+        android:textAppearance="?android:textAppearanceMedium"
+        android:textColor="#2B3D4D"
+        tools:targetApi="jelly_bean" />
 
-        <TextView
-            android:id="@+id/name"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:fontFamily="sans-serif-medium"
-            android:textAppearance="?android:textAppearanceMedium"
-            android:textColor="#2B3D4D"
-            tools:targetApi="jelly_bean" />
-
-        <TextView
-            android:id="@+id/quantity"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:fontFamily="sans-serif"
-            android:textAppearance="?android:textAppearanceMedium"
-            android:textColor="#2B3D4D"
-            tools:targetApi="jelly_bean" />
-    </LinearLayout>
+    <TextView
+        android:id="@+id/quantity"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/name"
+        android:fontFamily="sans-serif"
+        android:textAppearance="?android:textAppearanceMedium"
+        android:textColor="#2B3D4D"
+        tools:targetApi="jelly_bean" />
 
     <LinearLayout
-        android:layout_width="0dp"
-        android:layout_height="40dp"
-        android:layout_weight="1"
-        android:orientation="horizontal">
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@id/quantity">
 
         <TextView
             android:id="@+id/buy"
-            android:layout_width="wrap_content"
+            android:layout_width="66dp"
             android:layout_height="37dp"
             android:background="@color/colorPrimaryDark"
             android:gravity="center"
             android:text="@string/sale"
+            android:textAllCaps="true"
             android:textColor="#FFFFFF"
             android:textSize="@dimen/textsize" />
+
+        <TextView
+            android:id="@+id/order"
+            android:layout_width="wrap_content"
+            android:layout_height="37dp"
+            android:layout_marginLeft="@dimen/spacing1"
+            android:background="@color/colorPrimaryDark"
+            android:gravity="center"
+            android:text="@string/order"
+            android:textAllCaps="true"
+            android:textColor="#FFFFFF"
+            android:textSize="@dimen/textsize"
+            android:layout_marginStart="@dimen/spacing1" />
+        <TextView
+            android:id="@+id/phone"
+            android:layout_width="wrap_content"
+            android:layout_height="37dp"
+            android:layout_marginLeft="@dimen/spacing1"
+            android:background="@color/colorPrimaryDark"
+            android:gravity="center"
+            android:text="@string/call"
+            android:textAllCaps="true"
+            android:textColor="#FFFFFF"
+            android:textSize="@dimen/textsize"
+            android:layout_marginStart="@dimen/spacing1" />
     </LinearLayout>
-</LinearLayout>
+</RelativeLayout>
+
+

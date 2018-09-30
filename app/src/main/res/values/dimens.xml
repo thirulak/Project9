@@ -20,5 +20,6 @@
     <dimen name="add_quantity_text">26sp</dimen>
     <dimen name="textsize">28sp</dimen>
     <dimen name="listmargin">54dp</dimen>
+    <dimen name="spacing1">30dp</dimen>
 </resources>
 
