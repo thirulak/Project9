@@ -164,7 +164,15 @@ public class EditorActivity extends AppCompatActivity implements LoaderManager.L
         mSupplierPhoneEditText.setOnTouchListener(mTouchListener);
         mQuantityEditText.setOnTouchListener(mTouchListener);
         mPriceEditText.setOnTouchListener(mTouchListener);
-        mSupplierSpinner.setOnTouchListener(mTouchListener);
+        // Setup OnFocusChangeListeners on all the input fields, so we can hide the
+        // soft keyboard and get it out of the way
+        mProductNameEditText.setOnFocusChangeListener(mFocusChangeListener);
+        mProductAuthorEditText.setOnFocusChangeListener(mFocusChangeListener);
+        mQuantityEditText.setOnFocusChangeListener(mFocusChangeListener);
+        mPriceEditText.setOnFocusChangeListener(mFocusChangeListener);
+
+        // Setup OnTouchListener on the spinner so we can hide the soft keyboard
+        mSupplierSpinner.setOnTouchListener(mSpinnerTouchListener);
         setupSpinner();
     }
 
@@ -251,10 +259,10 @@ public class EditorActivity extends AppCompatActivity implements LoaderManager.L
         }
         values.put(BookContract.BookEntry.COLUMN_PRICE, price);
         int quantity = 0;
-        if(!TextUtils.isEmpty(quantityString)) {
+        if (!TextUtils.isEmpty(quantityString)) {
             quantity = Integer.parseInt(quantityString);
         }
-        values.put(BookEntry.COLUMN_QUANTITY,quantity);
+        values.put(BookEntry.COLUMN_QUANTITY, quantity);
         // Determine if this is a new or existing book by checking if mCurrentBookUri is null or not
         if (mCurrentBookUri == null) {
             // This is a NEW Book, so insert a new Book into the provider,
@@ -612,6 +620,7 @@ public class EditorActivity extends AppCompatActivity implements LoaderManager.L
     private void displayprice() {
         mPriceEditText.setText(String.valueOf(quantity * 100));
     }
+
     // Hide the software keyboard when necessary
     public void hideSoftKeyboard(View view) {
         InputMethodManager inputMethodManager = (InputMethodManager) getSystemService(Activity.INPUT_METHOD_SERVICE);
