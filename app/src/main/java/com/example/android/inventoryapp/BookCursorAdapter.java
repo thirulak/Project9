@@ -83,22 +83,24 @@ public class BookCursorAdapter extends CursorAdapter {
         quantityTextView.setText(BookQuantity);
 
         buyTextView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (v != null) {
-                    ContentValues values = new ContentValues();
-                    values.put(BookContract.BookEntry.COLUMN_PRODUCT_NAME, BookName);
-                    values.put(BookContract.BookEntry.COLUMN_QUANTITY, BookQuantity);
+                                           @Override
+                                           public void onClick(View v) {
+                                               if (v != null) {
+                                                   ContentValues values = new ContentValues();
+                                                   values.put(BookContract.BookEntry.COLUMN_PRODUCT_NAME, BookName);
+                                                   values.put(BookContract.BookEntry.COLUMN_QUANTITY, BookQuantity);
 
-                    Uri currentInventoryUri = ContentUris.withAppendedId(BookContract.BookEntry.CONTENT_URI, id);
+                                                   Uri currentInventoryUri = ContentUris.withAppendedId(BookContract.BookEntry.CONTENT_URI, id);
 
-                    int rowsAffected = context.getContentResolver().update(currentInventoryUri, values, null, null);
-                    if (rowsAffected == 0 || mQuantity == 0) {
-                        Toast.makeText(context, context.getString(R.string.sell_product_failed), Toast.LENGTH_SHORT).show();
-                    }
-                }
-            }
-        });
+                                                   int rowsAffected = context.getContentResolver().update(currentInventoryUri, values, null, null);
+                                                   if (rowsAffected == 0 || mQuantity == 0) {
+                                                       Toast.makeText(context, context.getString(R.string.sell_product_failed), Toast.LENGTH_SHORT).show();
+                                                   }
+                                               }
+                                           }
+                                       }
+        );
+
     }
 }
 
