@@ -26,6 +26,7 @@ import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.Toast;
@@ -80,6 +81,8 @@ public class EditorActivity extends AppCompatActivity implements LoaderManager.L
     private int quantity;
     private int priceInt;
     private int price;
+    private Button plusButton;
+    private Button minusButton;
     /**
      * Supplier of the book. The possible valid values are in the BookContract.java file:
      * {@link BookEntry#SUPPLIER_SELECT}, {@link BookEntry#SUPPLIER_1}, {@link BookEntry#SUPPLIER_2
@@ -139,6 +142,8 @@ public class EditorActivity extends AppCompatActivity implements LoaderManager.L
         if (mCurrentBookUri == null) {
             //this is a new book so change the appbar to say "add a Book"
             setTitle("Add a Book");
+            plusButton.setVisibility(View.GONE);
+            minusButton.setVisibility(View.GONE);
             // Invalidate the options menu, so the "Delete" menu option can be hidden.
             // (It doesn't make sense to delete a book that hasn't been created yet.)
             invalidateOptionsMenu();
@@ -157,6 +162,8 @@ public class EditorActivity extends AppCompatActivity implements LoaderManager.L
         mSupplierPhoneEditText = findViewById(R.id.edit_supplier_phone);
         mQuantityEditText = findViewById(R.id.edit_product_quantity);
         mPriceEditText = findViewById(R.id.edit_product_price);
+        plusButton = findViewById(R.id.button_plus);
+        minusButton = findViewById(R.id.button_minus);
         // Setup OnTouchListeners on all the input fields, so we can determine if the user
         // has touched or modified them. This will let us know if there are unsaved changes
         // or not, if the user tries to leave the editor without saving.
@@ -165,6 +172,8 @@ public class EditorActivity extends AppCompatActivity implements LoaderManager.L
         mSupplierPhoneEditText.setOnTouchListener(mTouchListener);
         mQuantityEditText.setOnTouchListener(mTouchListener);
         mPriceEditText.setOnTouchListener(mTouchListener);
+        minusButton.setOnTouchListener(mTouchListener);
+        plusButton.setOnTouchListener(mTouchListener);
         // Setup OnFocusChangeListeners on all the input fields, so we can hide the
         // soft keyboard and get it out of the way
         mProductNameEditText.setOnFocusChangeListener(mFocusChangeListener);
