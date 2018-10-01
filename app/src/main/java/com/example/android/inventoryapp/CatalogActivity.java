@@ -15,7 +15,6 @@ package com.example.android.inventoryapp;
  * limitations under the License.
  */
 
-
 import android.app.LoaderManager;
 import android.content.ContentUris;
 import android.content.ContentValues;
@@ -35,7 +34,6 @@ import android.widget.AdapterView;
 import android.widget.ListView;
 
 import com.example.android.inventoryapp.data.BookContract.BookEntry;
-
 
 /**
  * Displays list of books that were entered and stored in the app.
