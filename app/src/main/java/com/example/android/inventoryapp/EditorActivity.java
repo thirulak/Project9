@@ -28,6 +28,7 @@ import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.Toast;
 
+import com.example.android.inventoryapp.data.BookContract;
 import com.example.android.inventoryapp.data.BookContract.BookEntry;
 
 /**
@@ -39,8 +40,6 @@ public class EditorActivity extends AppCompatActivity implements LoaderManager.L
      * Identifier for the Book data loader
      **/
     private static final int EXISTING_BOOK_LOADER = 0;
-    int quantity = 0;
-    int price = 0;
     /**
      * content URI for the existing Book(null if its a new book)
      */
@@ -76,6 +75,7 @@ public class EditorActivity extends AppCompatActivity implements LoaderManager.L
     private String productAuthorString;
     private String supplierPhoneString;
     private int quantityInt;
+    private int quantity;
     private int priceInt;
     /**
      * Supplier of the book. The possible valid values are in the BookContract.java file:
@@ -222,6 +222,12 @@ public class EditorActivity extends AppCompatActivity implements LoaderManager.L
         if (!TextUtils.isEmpty(priceString)) {
             price = Integer.parseInt(priceString);
         }
+        values.put(BookContract.BookEntry.COLUMN_PRICE, price);
+        int quantity = 0;
+        if(!TextUtils.isEmpty(quantityString)) {
+            quantity = Integer.parseInt(quantityString);
+        }
+        values.put(BookEntry.COLUMN_QUANTITY,quantity);
         // Determine if this is a new or existing book by checking if mCurrentBookUri is null or not
         if (mCurrentBookUri == null) {
             // This is a NEW Book, so insert a new Book into the provider,
@@ -323,9 +329,8 @@ public class EditorActivity extends AppCompatActivity implements LoaderManager.L
                         };
                 // Show a dialog that notifies the user they have unsaved changes
                 showUnsavedChangesDialog(discardButtonClickListener);
-                return true;
         }
-        return super.onOptionsItemSelected(item);
+        return true;
     }
 
     /**
