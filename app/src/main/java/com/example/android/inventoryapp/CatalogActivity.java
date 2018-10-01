@@ -180,7 +180,8 @@ public class CatalogActivity extends AppCompatActivity implements LoaderManager.
         String[] projection = {
                 BookEntry._ID,
                 BookEntry.COLUMN_PRODUCT_NAME,
-                BookEntry.COLUMN_QUANTITY
+                BookEntry.COLUMN_QUANTITY,
+                BookEntry.COLUMN_PRICE
         };
         //This loader will execute the ContentProvider's query method on a background thread
         return new CursorLoader(this,

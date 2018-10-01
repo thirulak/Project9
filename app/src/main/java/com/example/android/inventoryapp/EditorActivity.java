@@ -79,6 +79,7 @@ public class EditorActivity extends AppCompatActivity implements LoaderManager.L
     private int quantityInt;
     private int quantity;
     private int priceInt;
+    private int price;
     /**
      * Supplier of the book. The possible valid values are in the BookContract.java file:
      * {@link BookEntry#SUPPLIER_SELECT}, {@link BookEntry#SUPPLIER_1}, {@link BookEntry#SUPPLIER_2

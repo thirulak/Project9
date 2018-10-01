@@ -66,19 +66,24 @@ public class BookCursorAdapter extends CursorAdapter {
         // Find individual views that we want to modify in the list item layout
         TextView nameTextView = (TextView) view.findViewById(R.id.name);
         TextView quantityTextView = (TextView) view.findViewById(R.id.quantity);
+        TextView priceTextView = (TextView) view.findViewById(R.id.price);
         TextView buyTextView = (TextView) view.findViewById(R.id.buy);
 
         // Find the columns of Book attributes that we're interested in
         int nameColumnIndex = cursor.getColumnIndex(BookContract.BookEntry.COLUMN_PRODUCT_NAME);
         int quantityColumnIndex = cursor.getColumnIndex(BookContract.BookEntry.COLUMN_QUANTITY);
+        int priceColumnIndex = cursor.getColumnIndex(BookContract.BookEntry.COLUMN_PRICE);
         // Read the Book attributes from the Cursor for the current book
         final String BookName = cursor.getString(nameColumnIndex);
         final String BookQuantity = cursor.getString(quantityColumnIndex);
+        final String BookPrice = cursor.getString(priceColumnIndex);
         mQuantity = Integer.parseInt(BookQuantity);
+
 
         // Update the TextViews with the attributes for the current pet
         nameTextView.setText(BookName);
         quantityTextView.setText(BookQuantity);
+        priceTextView.setText(BookPrice);
         // OnClickListener for Sale button
         // When clicked it reduces the number in stock by 1.
         final String id = cursor.getString(cursor.getColumnIndex(BookContract.BookEntry._ID));
@@ -90,6 +95,7 @@ public class BookCursorAdapter extends CursorAdapter {
                                                    ContentValues values = new ContentValues();
                                                    values.put(BookContract.BookEntry.COLUMN_PRODUCT_NAME, BookName);
                                                    values.put(BookContract.BookEntry.COLUMN_QUANTITY, BookQuantity);
+                                                   values.put(BookContract.BookEntry.COLUMN_PRICE, BookPrice);
 
                                                    Uri currentInventoryUri = ContentUris.withAppendedId(BookContract.BookEntry.CONTENT_URI, Long.parseLong(id));
 
