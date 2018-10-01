@@ -100,6 +100,31 @@ public class EditorActivity extends AppCompatActivity implements LoaderManager.L
             return false;
         }
     };
+    /**
+     * OnTouchListener that listens for when a user touches the spinner
+     * to close the soft keyboard if it is open.
+     */
+    private View.OnTouchListener mSpinnerTouchListener = new View.OnTouchListener() {
+        @Override
+        public boolean onTouch(View view, MotionEvent motionEvent) {
+            mBookHasChanged = true;
+            hideSoftKeyboard(view);
+            view.performClick();
+            return false;
+        }
+    };
+    /**
+     * OnFocusChangeListener that listens for any click outside the EditText field
+     * so we can hide the keyboard.
+     */
+    private View.OnFocusChangeListener mFocusChangeListener = new View.OnFocusChangeListener() {
+        @Override
+        public void onFocusChange(View view, boolean hasFocus) {
+            if (!hasFocus) {
+                hideSoftKeyboard(view);
+            }
+        }
+    };
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
