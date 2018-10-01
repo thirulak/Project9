@@ -62,9 +62,7 @@ public class BookCursorAdapter extends CursorAdapter {
      */
     @Override
     public void bindView(View view, final Context context, Cursor cursor) {
-        final long id;
         final int mQuantity;
-        id = cursor.getLong(cursor.getColumnIndex(BookContract.BookEntry._ID));
         // Find individual views that we want to modify in the list item layout
         TextView nameTextView = (TextView) view.findViewById(R.id.name);
         TextView quantityTextView = (TextView) view.findViewById(R.id.quantity);
@@ -81,6 +79,9 @@ public class BookCursorAdapter extends CursorAdapter {
         // Update the TextViews with the attributes for the current pet
         nameTextView.setText(BookName);
         quantityTextView.setText(BookQuantity);
+        // OnClickListener for Sale button
+        // When clicked it reduces the number in stock by 1.
+        final String id = cursor.getString(cursor.getColumnIndex(BookContract.BookEntry._ID));
 
         buyTextView.setOnClickListener(new View.OnClickListener() {
                                            @Override
@@ -90,7 +91,7 @@ public class BookCursorAdapter extends CursorAdapter {
                                                    values.put(BookContract.BookEntry.COLUMN_PRODUCT_NAME, BookName);
                                                    values.put(BookContract.BookEntry.COLUMN_QUANTITY, BookQuantity);
 
-                                                   Uri currentInventoryUri = ContentUris.withAppendedId(BookContract.BookEntry.CONTENT_URI, id);
+                                                   Uri currentInventoryUri = ContentUris.withAppendedId(BookContract.BookEntry.CONTENT_URI, Long.parseLong(id));
 
                                                    int rowsAffected = context.getContentResolver().update(currentInventoryUri, values, null, null);
                                                    if (rowsAffected == 0 || mQuantity == 0) {
