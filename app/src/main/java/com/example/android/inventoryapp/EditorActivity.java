@@ -87,7 +87,7 @@ public class EditorActivity extends AppCompatActivity implements LoaderManager.L
     private int price;
     private Button plusButton;
     private Button minusButton;
-    private Button orderButton;
+    private Button callButton;
     /**
      * Supplier of the book. The possible valid values are in the BookContract.java file:
      * {@link BookEntry#SUPPLIER_SELECT}, {@link BookEntry#SUPPLIER_1}, {@link BookEntry#SUPPLIER_2
@@ -153,14 +153,14 @@ public class EditorActivity extends AppCompatActivity implements LoaderManager.L
         mPriceEditText = findViewById(R.id.edit_product_price);
         plusButton = findViewById(R.id.button_plus);
         minusButton = findViewById(R.id.button_minus);
-        orderButton = findViewById(R.id.button_order);
+        callButton = findViewById(R.id.button_call);
         //if the intent doesnot contain a Book contentURI , then we know that we are creating a new book
         if (mCurrentBookUri == null) {
             //this is a new book so change the appbar to say "add a Book"
             setTitle("Add a Book");
             plusButton.setVisibility(View.GONE);
             minusButton.setVisibility(View.GONE);
-            orderButton.setVisibility(View.GONE);
+            callButton.setVisibility(View.GONE);
             // Invalidate the options menu, so the "Delete" menu option can be hidden.
             // (It doesn't make sense to delete a book that hasn't been created yet.)
             invalidateOptionsMenu();
@@ -171,7 +171,7 @@ public class EditorActivity extends AppCompatActivity implements LoaderManager.L
             // and display the current values in the editor
             getLoaderManager().initLoader(EXISTING_BOOK_LOADER, null, this);
         }
-        orderButton.setOnClickListener(new View.OnClickListener() {
+        callButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(Intent.ACTION_DIAL, Uri.fromParts("tel", mSupplierPhoneEditText.getText().toString().trim(), null));
@@ -189,7 +189,7 @@ public class EditorActivity extends AppCompatActivity implements LoaderManager.L
         mPriceEditText.setOnTouchListener(mTouchListener);
         minusButton.setOnTouchListener(mTouchListener);
         plusButton.setOnTouchListener(mTouchListener);
-        orderButton.setOnTouchListener(mTouchListener);
+        callButton.setOnTouchListener(mTouchListener);
         // Setup OnFocusChangeListeners on all the input fields, so we can hide the
         // soft keyboard and get it out of the way
         mProductNameEditText.setOnFocusChangeListener(mFocusChangeListener);
