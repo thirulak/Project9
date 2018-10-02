@@ -81,27 +81,27 @@ public class BookCursorAdapter extends CursorAdapter {
 
         // Update the TextViews with the attributes for the current pet
         nameTextView.setText(BookName);
-        quantityTextView.setText(BookQuantity);
+        quantityTextView.setText(String.valueOf(BookQuantity));
         priceTextView.setText(BookPrice);
         // OnClickListener for Sale button
         // When clicked it reduces the number in stock by 1.
         final String id = cursor.getString(cursor.getColumnIndex(BookContract.BookEntry._ID));
 
         buyTextView.setOnClickListener(new View.OnClickListener() {
-                                           @Override
-                                           public void onClick(View view) {
-                                               if ( BookQuantity > 0) {
-                                                   Uri currentBookUri = ContentUris.withAppendedId(BookContract.BookEntry.CONTENT_URI, Long.parseLong(id));
-                                                   ContentValues values = new ContentValues();
-                                                   values.put(BookContract.BookEntry.COLUMN_QUANTITY, BookQuantity - 1);
-                                                   context.getContentResolver().update(currentBookUri, values, null, null);
-                                                   swapCursor(cursor);
-                                                   // Check if out of stock to display toast
-                                                   if (BookQuantity == 1) {
-                                                       Toast.makeText(context, R.string.toast_out_of_stock, Toast.LENGTH_SHORT).show();
-                                                   }
-                                               }
-                                           }
+            @Override
+            public void onClick(View view) {
+                if (BookQuantity > 0) {
+                    Uri currentBookUri = ContentUris.withAppendedId(BookContract.BookEntry.CONTENT_URI, Long.parseLong(id));
+                    ContentValues values = new ContentValues();
+                    values.put(BookContract.BookEntry.COLUMN_QUANTITY, BookQuantity - 1);
+                    context.getContentResolver().update(currentBookUri, values, null, null);
+                    swapCursor(cursor);
+                    // Check if out of stock to display toast
+                    if (BookQuantity == 1) {
+                        Toast.makeText(context, R.string.toast_out_of_stock, Toast.LENGTH_SHORT).show();
+                    }
+                }
+            }
         });
 
     }

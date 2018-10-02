@@ -88,6 +88,7 @@ public class CatalogActivity extends AppCompatActivity implements LoaderManager.
         //kick off the loader
         getLoaderManager().initLoader(BOOK_LOADER, null, this);
     }
+
     public void onBuyClick(long id, int quantity) {
         Uri currentProductUri = ContentUris.withAppendedId(BookEntry.CONTENT_URI, id);
         Log.v("CatalogActivity", "Uri: " + currentProductUri);
