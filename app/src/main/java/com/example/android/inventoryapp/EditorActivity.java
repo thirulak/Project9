@@ -87,6 +87,7 @@ public class EditorActivity extends AppCompatActivity implements LoaderManager.L
     private int price;
     private Button plusButton;
     private Button minusButton;
+    private Button orderButton;
     /**
      * Supplier of the book. The possible valid values are in the BookContract.java file:
      * {@link BookEntry#SUPPLIER_SELECT}, {@link BookEntry#SUPPLIER_1}, {@link BookEntry#SUPPLIER_2
@@ -134,6 +135,7 @@ public class EditorActivity extends AppCompatActivity implements LoaderManager.L
         }
     };
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -142,10 +144,23 @@ public class EditorActivity extends AppCompatActivity implements LoaderManager.L
         //inorder to figure out if we are creating a new book
         Intent intent = getIntent();
         mCurrentBookUri = intent.getData();
+        // Find all relevant views that we will need to read user input from
+        mProductNameEditText = findViewById(R.id.edit_product_name);
+        mProductAuthorEditText = findViewById(R.id.edit_product_author);
+        mSupplierSpinner = findViewById(R.id.spinner_supplier);
+        mSupplierPhoneEditText = findViewById(R.id.edit_supplier_phone);
+        mQuantityEditText = findViewById(R.id.edit_product_quantity);
+        mPriceEditText = findViewById(R.id.edit_product_price);
+        plusButton = findViewById(R.id.button_plus);
+        minusButton = findViewById(R.id.button_minus);
+        orderButton = findViewById(R.id.button_order);
         //if the intent doesnot contain a Book contentURI , then we know that we are creating a new book
         if (mCurrentBookUri == null) {
             //this is a new book so change the appbar to say "add a Book"
             setTitle("Add a Book");
+            plusButton.setVisibility(View.GONE);
+            minusButton.setVisibility(View.GONE);
+            orderButton.setVisibility(View.GONE);
             // Invalidate the options menu, so the "Delete" menu option can be hidden.
             // (It doesn't make sense to delete a book that hasn't been created yet.)
             invalidateOptionsMenu();
@@ -156,18 +171,14 @@ public class EditorActivity extends AppCompatActivity implements LoaderManager.L
             // and display the current values in the editor
             getLoaderManager().initLoader(EXISTING_BOOK_LOADER, null, this);
         }
+        orderButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(Intent.ACTION_DIAL, Uri.fromParts("tel", mSupplierPhoneEditText.getText().toString().trim(), null));
+                startActivity(intent);
+            }
+        });
 
-        // Find all relevant views that we will need to read user input from
-        plusButton.setVisibility(View.GONE);
-        minusButton.setVisibility(View.GONE);
-        mProductNameEditText = findViewById(R.id.edit_product_name);
-        mProductAuthorEditText = findViewById(R.id.edit_product_author);
-        mSupplierSpinner = findViewById(R.id.spinner_supplier);
-        mSupplierPhoneEditText = findViewById(R.id.edit_supplier_phone);
-        mQuantityEditText = findViewById(R.id.edit_product_quantity);
-        mPriceEditText = findViewById(R.id.edit_product_price);
-        plusButton = findViewById(R.id.button_plus);
-        minusButton = findViewById(R.id.button_minus);
         // Setup OnTouchListeners on all the input fields, so we can determine if the user
         // has touched or modified them. This will let us know if there are unsaved changes
         // or not, if the user tries to leave the editor without saving.
@@ -178,6 +189,7 @@ public class EditorActivity extends AppCompatActivity implements LoaderManager.L
         mPriceEditText.setOnTouchListener(mTouchListener);
         minusButton.setOnTouchListener(mTouchListener);
         plusButton.setOnTouchListener(mTouchListener);
+        orderButton.setOnTouchListener(mTouchListener);
         // Setup OnFocusChangeListeners on all the input fields, so we can hide the
         // soft keyboard and get it out of the way
         mProductNameEditText.setOnFocusChangeListener(mFocusChangeListener);
