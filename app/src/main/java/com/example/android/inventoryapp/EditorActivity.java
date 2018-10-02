@@ -142,8 +142,6 @@ public class EditorActivity extends AppCompatActivity implements LoaderManager.L
         if (mCurrentBookUri == null) {
             //this is a new book so change the appbar to say "add a Book"
             setTitle("Add a Book");
-            plusButton.setVisibility(View.GONE);
-            minusButton.setVisibility(View.GONE);
             // Invalidate the options menu, so the "Delete" menu option can be hidden.
             // (It doesn't make sense to delete a book that hasn't been created yet.)
             invalidateOptionsMenu();
@@ -156,6 +154,8 @@ public class EditorActivity extends AppCompatActivity implements LoaderManager.L
         }
 
         // Find all relevant views that we will need to read user input from
+        plusButton.setVisibility(View.GONE);
+        minusButton.setVisibility(View.GONE);
         mProductNameEditText = findViewById(R.id.edit_product_name);
         mProductAuthorEditText = findViewById(R.id.edit_product_author);
         mSupplierSpinner = findViewById(R.id.spinner_supplier);
