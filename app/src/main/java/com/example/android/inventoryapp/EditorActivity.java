@@ -348,6 +348,7 @@ public class EditorActivity extends AppCompatActivity implements LoaderManager.L
                     // Update toast with error message
                     Toast.makeText(getApplicationContext(), R.string.toast_error_saving_product_full, Toast.LENGTH_LONG).show();
                 }
+                break;
                 // Respond to a click on the "Delete" menu option
             case R.id.action_delete:
                 // Pop up confirmation dialog for deletion
@@ -609,7 +610,6 @@ public class EditorActivity extends AppCompatActivity implements LoaderManager.L
     public void increment(View view) {
         quantity++;
         displayQuantity();
-        displayprice();
     }
 
     public void decrement(View view) {
@@ -618,17 +618,11 @@ public class EditorActivity extends AppCompatActivity implements LoaderManager.L
         } else {
             quantity--;
             displayQuantity();
-            displayprice();
-
         }
     }
 
     public void displayQuantity() {
         mQuantityEditText.setText(String.valueOf(quantity));
-    }
-
-    private void displayprice() {
-        mPriceEditText.setText(String.valueOf(quantity * 100));
     }
 
     // Hide the software keyboard when necessary
