@@ -61,7 +61,7 @@ public class BookCursorAdapter extends CursorAdapter {
      *                correct row.
      */
     @Override
-    public void bindView(View view, final Context context, Cursor cursor) {
+    public void bindView(View view, final Context context, final Cursor cursor) {
         final int mQuantity;
         // Find individual views that we want to modify in the list item layout
         TextView nameTextView = (TextView) view.findViewById(R.id.name);
@@ -71,13 +71,12 @@ public class BookCursorAdapter extends CursorAdapter {
 
         // Find the columns of Book attributes that we're interested in
         int nameColumnIndex = cursor.getColumnIndex(BookContract.BookEntry.COLUMN_PRODUCT_NAME);
-        int quantityColumnIndex = cursor.getColumnIndex(BookContract.BookEntry.COLUMN_QUANTITY);
+        final int quantityColumnIndex = cursor.getColumnIndex(BookContract.BookEntry.COLUMN_QUANTITY);
         int priceColumnIndex = cursor.getColumnIndex(BookContract.BookEntry.COLUMN_PRICE);
         // Read the Book attributes from the Cursor for the current book
         final String BookName = cursor.getString(nameColumnIndex);
-        final String BookQuantity = cursor.getString(quantityColumnIndex);
+        final int BookQuantity = cursor.getInt(quantityColumnIndex);
         final String BookPrice = cursor.getString(priceColumnIndex);
-        mQuantity = Integer.parseInt(BookQuantity);
 
 
         // Update the TextViews with the attributes for the current pet
@@ -90,23 +89,20 @@ public class BookCursorAdapter extends CursorAdapter {
 
         buyTextView.setOnClickListener(new View.OnClickListener() {
                                            @Override
-                                           public void onClick(View v) {
-                                               if (v != null) {
+                                           public void onClick(View view) {
+                                               if ( BookQuantity > 0) {
+                                                   Uri currentBookUri = ContentUris.withAppendedId(BookContract.BookEntry.CONTENT_URI, Long.parseLong(id));
                                                    ContentValues values = new ContentValues();
-                                                   values.put(BookContract.BookEntry.COLUMN_PRODUCT_NAME, BookName);
-                                                   values.put(BookContract.BookEntry.COLUMN_QUANTITY, BookQuantity);
-                                                   values.put(BookContract.BookEntry.COLUMN_PRICE, BookPrice);
-
-                                                   Uri currentInventoryUri = ContentUris.withAppendedId(BookContract.BookEntry.CONTENT_URI, Long.parseLong(id));
-
-                                                   int rowsAffected = context.getContentResolver().update(currentInventoryUri, values, null, null);
-                                                   if (rowsAffected == 0 || mQuantity == 0) {
-                                                       Toast.makeText(context, context.getString(R.string.sell_product_failed), Toast.LENGTH_SHORT).show();
+                                                   values.put(BookContract.BookEntry.COLUMN_QUANTITY, BookQuantity - 1);
+                                                   context.getContentResolver().update(currentBookUri, values, null, null);
+                                                   swapCursor(cursor);
+                                                   // Check if out of stock to display toast
+                                                   if (BookQuantity == 1) {
+                                                       Toast.makeText(context, R.string.toast_out_of_stock, Toast.LENGTH_SHORT).show();
                                                    }
                                                }
                                            }
-                                       }
-        );
+        });
 
     }
 }
