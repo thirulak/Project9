@@ -96,6 +96,7 @@
     <string name="sale">sale</string>
     <string name="sell_product_failed">Quantity value invalid!</string>
     <string name="call">call</string>
+    <string name="order">order</string>
     <string name="toast_out_of_stock">Out of stock</string>
 
 
